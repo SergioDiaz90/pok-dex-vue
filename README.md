@@ -1,4 +1,4 @@
-# platzi-music
+# Pokdesk-vue
 
 ## Project setup
 ```
