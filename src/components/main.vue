@@ -4,7 +4,7 @@
       <div class="container">
         <div class="field">
         <p class="control has-icons-left">
-          <input v-model="searchInput" class="input" type="text" placeholder="Search">
+          <input v-model="search_input" class="input" type="text" placeholder="Search">
           <span class="icon is-small is-left">
             <i class="far fa-search"></i>
           </span>
@@ -15,10 +15,10 @@
     </nav>
 
     <div class="main__wrapper__info">
-      <ul class="main__wrapper__info--list">
+      <ul v-if="search_message.length !== 0" class="main__wrapper__info--list">
         <li
           @click="info_pokemon( item )"
-          v-for="( item ) in list_pokemon_name"
+          v-for="( item ) in search_message"
           :key="item"
           class="main__wrapper__info--list--item"
           data-target="modal-ter">
@@ -28,6 +28,11 @@
           </figure>
         </li>
       </ul>
+      <div class="main__wrapper__info" v-else >
+        <h2 class="main__wrapper__info--title"> Uh Oh! </h2>
+        <p class="main__wrapper__info--text"> You look lost on your journey! </p>
+        <button class="main__wrapper__info--button"> Go Back Home </button>
+      </div>
     </div>
 
   </section>
@@ -54,8 +59,9 @@ export default {
 
   data () {
     return {
-      searchInput: '',
+      search_input: '',
       list_pokemon_name: [],
+      copy_list_pokemon_name: [],
       list_info_for_pokemon: {},
       see_modal_pokemon: false
     }
@@ -63,13 +69,17 @@ export default {
 
   computed: {
     search_message () {
-      return `Encontrados: ${this.tracks.length}`;
+      return this.search();
     }
   },
 
   methods: {
-    search () {
-      console.log( 'tracks' , this.searchInput );
+    search ( ) {
+      if ( this.search_input !== '' ) {
+        let filtered = Object.values(this.list_pokemon_name);
+        return this.list_pokemon_name = filtered.filter( item => item.includes( this.search_input ));
+      }
+      return this.list_pokemon_name = this.copy_list_pokemon_name;
     },
 
     info_pokemon ( name ) {
@@ -114,6 +124,7 @@ export default {
         }
 
         this.list_pokemon_name.sort();
+        this.copy_list_pokemon_name = this.list_pokemon_name;
       });
   },
 
@@ -172,7 +183,37 @@ export default {
 
         }
       }
+
+      &--title {
+        font-family: lato;
+        font-weight: 700;
+        font-size: 36px;
+        margin: 0 0 20px 0;
+      }
+
+      &--text {
+        font-family: lato;
+        font-weight: 500;
+        font-size: 20px;
+        margin: 0 0 15px 0;
+      }
+
+      &--button {
+        width: 155px;
+				height: 44px;
+				display: inline-flex;
+				justify-content: center;
+				align-items: center;
+				border-radius: 60px;
+        font-size: 18px;
+				color: white;
+				border: none;
+				outline: none;
+				cursor: pointer;
+        background-color: #F22539;
+      }
     }
+
   }
 
 </style>
