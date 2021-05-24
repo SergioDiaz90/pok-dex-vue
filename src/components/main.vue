@@ -18,20 +18,25 @@
       </div>
     </nav>
 
-    <div class="main__wrapper__info">
+    <div v-if="!see_list_favorite" class="main__wrapper__info">
+
       <ul v-if="search_message.length !== 0" class="main__wrapper__info--list">
         <li
           @click="info_pokemon( item )"
-          v-for="( item ) in search_message"
+          v-for="( item, idx ) in search_message"
           :key="item"
           class="main__wrapper__info--list--item"
           data-target="modal-ter">
           <p>{{ item }}</p>
-          <figure>
-            <img src="../assets/img/start-unset.svg" alt="">
+          <figure :id="idx" @click.stop="toggle_favorite( idx, item )">
+            <svg width="44" height="44" class="unset" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="22" cy="22" r="22" fill="#F5F5F5"/>
+              <path d="M20.6052 9.90444L17.4318 16.627L10.3316 17.7086C9.05834 17.9015 8.54806 19.5415 9.47142 20.4809L14.6082 25.7107L13.3933 33.0984C13.1746 34.4338 14.5208 35.4341 15.6482 34.8096L22 31.3213L28.3518 34.8096C29.4792 35.429 30.8254 34.4338 30.6067 33.0984L29.3918 25.7107L34.5286 20.4809C35.4519 19.5415 34.9417 17.9015 33.6684 17.7086L26.5682 16.627L23.3948 9.90444C22.8262 8.70615 21.1787 8.69092 20.6052 9.90444Z"/>
+          </svg>
           </figure>
         </li>
       </ul>
+
       <div
         v-else-if="search_message.length === 0 && search_input !== '' "
         class="main__wrapper__info">
@@ -42,9 +47,37 @@
       <view-loading v-else></view-loading>
     </div>
 
+    <div v-else class="main__wrapper__info">
+
+      <ul v-if="list_favorite.length !== 0" class="main__wrapper__info--list">
+        <li
+          @click="info_pokemon( item )"
+          v-for="( item, idx ) in list_favorite"
+          :key="item"
+          class="main__wrapper__info--list--item"
+          data-target="modal-ter">
+          <p>{{ item }}</p>
+          <figure :id="idx" @click.stop="toggle_favorite( idx, item )">
+            <svg width="44" height="44" class="unset" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="22" cy="22" r="22" fill="#F5F5F5"/>
+              <path d="M20.6052 9.90444L17.4318 16.627L10.3316 17.7086C9.05834 17.9015 8.54806 19.5415 9.47142 20.4809L14.6082 25.7107L13.3933 33.0984C13.1746 34.4338 14.5208 35.4341 15.6482 34.8096L22 31.3213L28.3518 34.8096C29.4792 35.429 30.8254 34.4338 30.6067 33.0984L29.3918 25.7107L34.5286 20.4809C35.4519 19.5415 34.9417 17.9015 33.6684 17.7086L26.5682 16.627L23.3948 9.90444C22.8262 8.70615 21.1787 8.69092 20.6052 9.90444Z"/>
+          </svg>
+          </figure>
+        </li>
+      </ul>
+
+      <div
+        v-else-if="list_favorite.length === 0 && search_input !== '' "
+        class="main__wrapper__info">
+          <h2 class="main__wrapper__info--title"> Uh Oh! </h2>
+          <p class="main__wrapper__info--text"> You look lost on your journey! </p>
+          <router-link to="/" class="main__wrapper__info--button"> Go Back Home </router-link>
+      </div>
+      <view-loading v-else></view-loading>
+    </div>
   </section>
 
-  <view-footer></view-footer>
+  <view-footer @list_favorite="favorites_list"></view-footer>
 
   <view-modal-pokemon
     v-if="see_modal_pokemon"
@@ -84,7 +117,8 @@ export default {
       copy_list_pokemon_name: [],
       list_info_for_pokemon: {},
       see_modal_pokemon: false,
-      loading_event: false
+      see_list_favorite: false,
+      list_favorite: [],
     }
   },
 
@@ -95,12 +129,19 @@ export default {
   },
 
   methods: {
-    search ( ) {
+    search () {
+
       if ( this.search_input !== '' ) {
-        let filtered = Object.values(this.list_pokemon_name);
-        return this.list_pokemon_name = filtered.filter( item => item.includes( this.search_input ));
+        if ( !this.see_list_favorite ) {
+          let filtered = Object.values(this.list_pokemon_name);
+          return this.list_pokemon_name = filtered.filter( item => item.includes( this.search_input ));
+        } else {
+          return this.favorites_list;
+        }
       }
-      return this.list_pokemon_name = this.copy_list_pokemon_name;
+
+      this.list_pokemon_name = this.copy_list_pokemon_name;
+      return this.see_list_favorite ? this.favorites_list : this.list_pokemon_name;
     },
 
     info_pokemon ( name ) {
@@ -123,6 +164,21 @@ export default {
 
     close_modal_info ( value ) {
       this.see_modal_pokemon = value
+    },
+
+    toggle_favorite ( id, name ) {
+      let elm = document.getElementById( id );
+
+      let img_start = elm.childNodes[0];
+      console.log( name );
+      img_start.classList.toggle( 'favorite' );
+
+      this.list_favorite.push( name );
+    },
+
+    favorites_list ( value ) {
+      console.log( 'favorites_list' )
+      this.see_list_favorite = value;
     }
 
   },
@@ -197,6 +253,8 @@ export default {
           figure {
             width: 40px;
             height: 40px;
+            position: relative;
+            z-index: 3;
           }
 
         }
@@ -232,6 +290,14 @@ export default {
       }
     }
 
+  }
+
+  .unset {
+    fill: #BFBFBF;
+  }
+
+  .favorite {
+    fill: #ECA539;
   }
 
 </style>

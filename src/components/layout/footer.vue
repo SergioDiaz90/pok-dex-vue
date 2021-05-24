@@ -1,13 +1,13 @@
 <template>
 	<section class="footer__wrapper">
 		<div class="footer__wrapper--buttons">
-			<button class="footer__wrapper--buttons--red">
+			<button @click="all_list" class="footer__wrapper--buttons--red">
 				<figure>
 					<img src="../../assets/img/all-tems.svg" alt="Menu lista" aria-label="Menu lista">
 				</figure>
 				<span> All </span>
 			</button>
-			<button class="footer__wrapper--buttons--gray">
+			<button @click="favorites_list" class="footer__wrapper--buttons--gray">
 				<figure>
 					<img src="../../assets/img/start-items.svg" alt="Favorites" aria-label="Favorites">
 				</figure>
@@ -21,8 +21,14 @@
 	export default {
 		name: 'footer',
 
-		data() {
+		methods: {
+			favorites_list () {
+				this.$emit( 'list_favorite', true );
+			},
 
+			all_list () {
+				this.$emit( 'list_favorite', false );
+			}
 		},
 	}
 </script>
