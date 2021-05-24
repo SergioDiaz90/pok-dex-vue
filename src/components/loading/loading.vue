@@ -18,9 +18,14 @@
 
 <style lang="scss">
 	.loading__wrapper {
+		position:absolute;
+		top: 0;
+		left: 0;
 		width: 100%;
 		height: 100vh;
 		padding: 45vh 0;
+		background-color: #E5E5E5;
+		z-index: 3;
 
 	}
 </style>

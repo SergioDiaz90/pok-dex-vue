@@ -5,7 +5,9 @@
 		</figure>
 		<h1 class="welcome__wrapper--title">Welcome to Pokédex</h1>
 		<p class="welcome__wrapper--text">The digital encyclopedia created by Professor Oak is an invaluable tool to Trainers in the Pokémon world.</p>
-		<button class="welcome__wrapper--button"> Get started </button>
+		<router-link to="/main" class="welcome__wrapper--button">
+			Get started
+		</router-link>
 	</section>
 </template>
 
@@ -42,12 +44,14 @@ export default {
 		&--button {
 			width: 131px;
 			height: 44px;
+			padding: 10px 20px;
 			font-size: 18px;
 			font-style: normal;
 			font-weight: 700;
 			border-radius: 60px;
 			background-color: #F22539;
 			color: #FFFFFF;
+			cursor: pointer;
 		}
 	}
 

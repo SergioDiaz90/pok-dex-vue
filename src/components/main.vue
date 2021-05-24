@@ -4,10 +4,14 @@
       <div class="container">
         <div class="field">
         <p class="control has-icons-left">
-          <input v-model="search_input" class="input" type="text" placeholder="Search">
-          <span class="icon is-small is-left">
-            <i class="far fa-search"></i>
-          </span>
+          <input
+            v-model="search_input"
+            class="input"
+            type="text"
+            placeholder="Search">
+            <span class="icon is-small is-left">
+              <i class="far fa-search"></i>
+            </span>
         </p>
       </div>
 
@@ -28,24 +32,32 @@
           </figure>
         </li>
       </ul>
-      <div class="main__wrapper__info" v-else >
-        <h2 class="main__wrapper__info--title"> Uh Oh! </h2>
-        <p class="main__wrapper__info--text"> You look lost on your journey! </p>
-        <button class="main__wrapper__info--button"> Go Back Home </button>
+      <div
+        v-else-if="search_message.length === 0 && search_input !== '' "
+        class="main__wrapper__info">
+          <h2 class="main__wrapper__info--title"> Uh Oh! </h2>
+          <p class="main__wrapper__info--text"> You look lost on your journey! </p>
+          <router-link to="/" class="main__wrapper__info--button"> Go Back Home </router-link>
       </div>
+      <view-loading v-else></view-loading>
     </div>
 
   </section>
+
+  <view-footer></view-footer>
+
   <view-modal-pokemon
     v-if="see_modal_pokemon"
     :info="list_info_for_pokemon"
-    @close_modal="close_modal_info"
-    ></view-modal-pokemon>
+    @close_modal="close_modal_info">
+  </view-modal-pokemon>
+
 </template>
 
 <script>
-
+import footer from '../components/layout/footer.vue';
 import modal_pokemon from '../components/modal_pokemon/modal_pokemon.vue';
+import loading from '../components/loading/loading.vue';
 
 import { get_info_pokemon, get_list_pokemon } from '../services/config.js';
 
@@ -57,13 +69,22 @@ export default {
     msg: String
   },
 
+
+  components: {
+    'view-modal-pokemon': modal_pokemon,
+    'view-loading': loading,
+    'view-footer': footer
+  },
+
+
   data () {
     return {
       search_input: '',
       list_pokemon_name: [],
       copy_list_pokemon_name: [],
       list_info_for_pokemon: {},
-      see_modal_pokemon: false
+      see_modal_pokemon: false,
+      loading_event: false
     }
   },
 
@@ -107,10 +128,6 @@ export default {
   },
 
 
-  components: {
-    'view-modal-pokemon': modal_pokemon
-  },
-
   beforeCreate() {
     get_list_pokemon()
       .then( res => {
@@ -125,13 +142,14 @@ export default {
 
         this.list_pokemon_name.sort();
         this.copy_list_pokemon_name = this.list_pokemon_name;
+
       });
   },
 
-  mounted() {
-    
-  },
 
+  unmounted() {
+    this.list_pokemon_name = []
+  },
 }
 
 </script>
