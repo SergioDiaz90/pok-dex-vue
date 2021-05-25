@@ -152,9 +152,11 @@ export default {
     info_pokemon ( name ) {
       get_info_pokemon( name )
         .then( res => {
+          console.log( 'entro' , res );
           this.list_info_for_pokemon.name = res.name;
           this.list_info_for_pokemon.weight = res.weight;
           this.list_info_for_pokemon.height = res.height;
+          this.list_info_for_pokemon.img = res.sprites.other["official-artwork"].front_default;
 
           let types = [];
           for ( let i = 0; i < res.types.length; i++) {
@@ -190,7 +192,6 @@ export default {
         delete this.list_favorite[ idx ];
         this.persist_favorites_color = this.persist_favorites_color.filter( item => item.id !== id );
       }
-      console.log( this.list_favorite.indexOf( name ), this.list_favorite );
     },
 
     favorites_list ( value ) {

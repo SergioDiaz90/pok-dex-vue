@@ -21,6 +21,7 @@ export let get_info_pokemon = ( path ) => {
 	return _get( path )
 		.then( response => response.json())
 		.then( data => {
+			console.log( data );
 			return data;
 		});
 }

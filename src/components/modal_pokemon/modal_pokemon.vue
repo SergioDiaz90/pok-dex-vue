@@ -4,7 +4,7 @@
 		<div class="modal-card">
 			<header class="modal-card-head">
 				<figure>
-					<!-- <img src="../../assets/img/bg-modal.svg" alt=""> -->
+					<img :src="info.img" alt="">
 				</figure>
 				<button @click="close_modal" class="delete" aria-label="close"></button>
 			</header>
@@ -94,6 +94,20 @@ export default {
 					top: 0;
 					right: 0;
 					margin: 12px 12px 0 0;
+				}
+
+				figure {
+					width: 70%;
+					margin: 0 auto;
+					position: relative;
+
+					img {
+						width: 200px;
+						height: 200px;
+						position: absolute;
+						top: -42px;
+						left: 25%;;
+					}
 				}
 			}
 
