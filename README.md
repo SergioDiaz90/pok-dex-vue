@@ -1,24 +1,29 @@
 # Pokdesk-vue
+```
+Este es un proyecto en el que se busca mostrar la información de los pokemon, de acuerdo a criterios de búsqueda y selección del usuario.
 
-## Project setup
+```
+
+##
+## Dependencias del proyecto
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### Compilación y recarga en caliente para el desarrollo
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### Compila y minifica para la producción
 ```
 npm run build
 ```
 
-### Lints and fixes files
+### Fichas y correcciones
 ```
 npm run lint
 ```
 
-### Customize configuration
+### Personalizar la configuración
 See [Configuration Reference](https://cli.vuejs.org/config/).

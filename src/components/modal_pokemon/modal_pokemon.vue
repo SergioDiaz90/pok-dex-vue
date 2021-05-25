@@ -27,7 +27,7 @@
 			</section>
 			<footer class="modal-card-foot">
 				<div class="modal-card-foot__container">
-					<button class="modal-card-foot__container--button">Share to my friends</button>
+					<button @click="clipboard_info" class="modal-card-foot__container--button">Share to my friends</button>
 					<figure class="button">
 						<img src="../../assets/img/start-unset.svg" alt="">
 					</figure>
@@ -53,6 +53,16 @@ export default {
 	methods: {
 		close_modal () {
 			this.$emit('close_modal', false );
+		},
+
+		clipboard_info() {
+			const input_transition = document.createElement('input');
+			let string_info = `${ this.info.name }, ${ this.info.weight },  ${ this.info.height }, ${ this.info.types[0] }, ${ this.info.types[1]}`;
+			input_transition.setAttribute('value', string_info );
+			document.body.appendChild(input_transition);
+			input_transition.select();
+			document.execCommand('copy');
+			document.body.removeChild(input_transition);
 		}
 	},
 

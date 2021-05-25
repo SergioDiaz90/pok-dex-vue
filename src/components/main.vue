@@ -52,13 +52,14 @@
       <ul v-if="list_favorite.length !== 0" class="main__wrapper__info--list">
         <li
           @click="info_pokemon( item )"
+          @touchstart="info_pokemon( item )"
           v-for="( item, idx ) in list_favorite"
           :key="item"
           class="main__wrapper__info--list--item"
           data-target="modal-ter">
           <p>{{ item }}</p>
           <figure :id="idx" @click.stop="toggle_favorite( idx, item )">
-            <svg width="44" height="44" class="unset" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+            <svg width="44" height="44" class="favorite" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
               <circle cx="22" cy="22" r="22" fill="#F5F5F5"/>
               <path d="M20.6052 9.90444L17.4318 16.627L10.3316 17.7086C9.05834 17.9015 8.54806 19.5415 9.47142 20.4809L14.6082 25.7107L13.3933 33.0984C13.1746 34.4338 14.5208 35.4341 15.6482 34.8096L22 31.3213L28.3518 34.8096C29.4792 35.429 30.8254 34.4338 30.6067 33.0984L29.3918 25.7107L34.5286 20.4809C35.4519 19.5415 34.9417 17.9015 33.6684 17.7086L26.5682 16.627L23.3948 9.90444C22.8262 8.70615 21.1787 8.69092 20.6052 9.90444Z"/>
           </svg>
@@ -113,11 +114,15 @@ export default {
   data () {
     return {
       search_input: '',
-      list_pokemon_name: [],
-      copy_list_pokemon_name: [],
-      list_info_for_pokemon: {},
+
       see_modal_pokemon: false,
       see_list_favorite: false,
+
+      list_info_for_pokemon: {},
+
+      persist_favorites_color: [],
+      list_pokemon_name: [],
+      copy_list_pokemon_name: [],
       list_favorite: [],
     }
   },
@@ -170,17 +175,40 @@ export default {
       let elm = document.getElementById( id );
 
       let img_start = elm.childNodes[0];
-      console.log( name );
+      let has_name = this.list_favorite.indexOf( name );
+
+
       img_start.classList.toggle( 'favorite' );
 
-      this.list_favorite.push( name );
+      if ( has_name === -1 ) {
+        this.list_favorite.push( name );
+        this.persist_favorites_color.push({ id, name });
+      }
+
+      if ( img_start.classList.contains( 'favorite' ) === false ) {
+        let idx = this.list_favorite.indexOf( name );
+        delete this.list_favorite[ idx ];
+        this.persist_favorites_color = this.persist_favorites_color.filter( item => item.id !== id );
+      }
+      console.log( this.list_favorite.indexOf( name ), this.list_favorite );
     },
 
     favorites_list ( value ) {
-      console.log( 'favorites_list' )
       this.see_list_favorite = value;
-    }
 
+      if ( value === false ) {
+        this.persist_favorites();
+      }
+    },
+
+    persist_favorites() {
+      for ( let i = 0; i < this.persist_favorites_color.length; i++ ) {
+          let v = Object.values( this.persist_favorites_color[i] );
+          setTimeout( () => {
+            this.toggle_favorite( v[0], v[1] );
+          }, 0);
+      }
+    }
   },
 
 

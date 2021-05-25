@@ -1,13 +1,19 @@
 <template>
 	<section class="footer__wrapper">
 		<div class="footer__wrapper--buttons">
-			<button @click="all_list" class="footer__wrapper--buttons--red">
+			<button
+				@click="all_list"
+				@touchstart="all_list"
+				class="footer__wrapper--buttons--red">
 				<figure>
 					<img src="../../assets/img/all-tems.svg" alt="Menu lista" aria-label="Menu lista">
 				</figure>
 				<span> All </span>
 			</button>
-			<button @click="favorites_list" class="footer__wrapper--buttons--gray">
+			<button
+				@click="favorites_list"
+				@touchstart="favorites_list"
+				class="footer__wrapper--buttons--gray">
 				<figure>
 					<img src="../../assets/img/start-items.svg" alt="Favorites" aria-label="Favorites">
 				</figure>
@@ -45,10 +51,12 @@
 		&--buttons {
 			width: 70%;
 			margin: 0 auto;
+			display: flex;
+			justify-content: space-between;
 			padding: 18px 0;
 
 			&--red, &--gray {
-				width: 275px;
+				width: 45%;
 				height: 44px;
 				margin: 0 20px 0 0;
 				display: inline-flex;
